@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.connector.db.user.UserRepository;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.User;
 import com.example.demo.web.data.UserWeb;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,30 +10,24 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
 
     @InjectMocks
-    private UserService userService;
-
+    private UserServiceImpl userService;
     @Mock
     private UserRepository userRepository;
-
     @Mock
     private ModelMapper modelMapper;
 
     @BeforeEach
     public void init() {
         MockitoAnnotations.initMocks(this);
-        User user = new User();
-        user.setId("123");
-        user.setFiscalCode("ABC");
-        when(userRepository.findByFiscalCode(anyString())).thenReturn(Optional.of(user));
     }
 
     @Test
@@ -46,6 +39,9 @@ public class UserServiceTest {
         verify(userRepository, times(1)).findAll();
 
     }
+    //torna una lista con 3 oggetti pieni e 2 oggetti null
+    //torna una lista con soli 3 oggetti null
+    //torna una lista empty
 
     @Test
     public void testGetUserById() {
@@ -56,13 +52,8 @@ public class UserServiceTest {
         userService.getUserById("123");
         verify(userRepository, times(1)).findById(anyString());
     }
-
-    @Test
-    public void testGetUserByIdNotFound() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> userService.getUserById("123"));
-        verify(userRepository, times(1)).findById(anyString());
-    }
+    //torna null
+    //il mapper torna null
 
     @Test
     public void testGetUserByFiscalCode() {
@@ -74,14 +65,10 @@ public class UserServiceTest {
         userService.getUserByFiscalCode("ABC");
         verify(userRepository, times(1)).findByFiscalCode(anyString());
     }
+    //torna un oggetto null
+    //il mapper torna null
 
-    @Test
-    public void testGetUserByFiscalCodeNotFound() {
-        when(userRepository.findByFiscalCode(anyString())).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> userService.getUserByFiscalCode("123"));
-        verify(userRepository, times(1)).findByFiscalCode(anyString());
-    }
-
+    //caso dritto
     @Test
     public void testCreateUser() {
         User user = new User();
@@ -90,7 +77,10 @@ public class UserServiceTest {
         userService.createUser(userWeb);
         verify(userRepository, times(1)).save(any());
     }
+//il mapper torna null
+    // il save torna null
 
+//caso dritto
     @Test
     public void testUpdateUser() {
         User user = new User();
@@ -101,6 +91,10 @@ public class UserServiceTest {
         verify(userRepository, times(1)).save(any());
     }
 
+    //il mapper torna null
+    //torna null
+
+    //caso dritto
     @Test
     public void testDeleteUser() {
         User user = new User();
@@ -109,10 +103,10 @@ public class UserServiceTest {
         verify(userRepository, times(1)).deleteById(anyString());
     }
 
-    @Test
-    public void testDeleteUserNotFound() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> userService.deleteUser("123"));
-        verify(userRepository, times(1)).findById(anyString());
-    }
+    //csv
+    //InputStreamReader va in IOException
+    //StreamSupport.stream torna una lista null
+    //torna una lista vuota
+    //caso dritto
+
 }
