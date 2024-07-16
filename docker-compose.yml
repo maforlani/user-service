@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  mongo_db:
+    image: mongo:latest
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+      - MONGO_INITDB_DATABASE=USER
+    ports:
+      - 27017:27017
+#    volumes:
+#      - db:/data/db
+
+  app:
+    depends_on:
+      - mongo_db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_APPLICATION_JSON: '{
+          "spring.data.mongodb.uri" : "mongodb://user:pass@mongo_db:27017/USER?authSource=admin"
+        }'
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:

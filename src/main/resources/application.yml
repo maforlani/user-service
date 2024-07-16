@@ -1,0 +1,8 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://user:pass@mongo_db:27017/USER?authSource=admin
+
+#server:
+#  servlet:
+#    context-path: /user-api

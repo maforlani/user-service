@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: USER_TEST
+
+logging:
+  level:
+    root: WARN
+    org.springframework.web: DEBUG
+    org.springframework.data.mongodb: DEBUG
+
