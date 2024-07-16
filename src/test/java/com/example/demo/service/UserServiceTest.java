@@ -37,7 +37,6 @@ public class UserServiceTest {
         when(userRepository.findAll()).thenReturn(Arrays.asList(user1, user2));
         userService.getAllUsers();
         verify(userRepository, times(1)).findAll();
-
     }
     //torna una lista con 3 oggetti pieni e 2 oggetti null
     //torna una lista con soli 3 oggetti null
@@ -102,11 +101,5 @@ public class UserServiceTest {
         userService.deleteUser("123");
         verify(userRepository, times(1)).deleteById(anyString());
     }
-
-    //csv
-    //InputStreamReader va in IOException
-    //StreamSupport.stream torna una lista null
-    //torna una lista vuota
-    //caso dritto
 
 }

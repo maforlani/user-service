@@ -10,8 +10,8 @@ services:
       - MONGO_INITDB_DATABASE=USER
     ports:
       - 27017:27017
-#    volumes:
-#      - db:/data/db
+    volumes:
+      - db:/data/db
 
   app:
     depends_on:

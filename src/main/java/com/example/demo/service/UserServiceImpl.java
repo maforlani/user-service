@@ -79,43 +79,5 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    @Override
-    @Transactional
-    public void saveUsersFromCsv(MultipartFile csvFile) {
-        try (Reader reader = new InputStreamReader(csvFile.getInputStream());
-             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
-                     .withDelimiter(';')
-                     .withFirstRecordAsHeader()
-                     .withIgnoreHeaderCase()
-                     .withTrim())) {
-
-            List<User> users = StreamSupport.stream(csvParser.getRecords().spliterator(), false)
-                    .map(this::mapCsvRecordToUser)
-                    .collect(Collectors.toList());
-
-            userRepository.saveAll(users);
-
-        } catch (IOException e) {
-            String errMsg = MessageFormat.format("Invalid File. Message {0}:", e.getMessage());
-            logger.error(errMsg);
-            throw new InconsistentDataException(errMsg);
-        }
-    }
-
-    private User mapCsvRecordToUser(CSVRecord csvRecord) {
-        User user = new User();
-        logger.info("csvRecord: {}", csvRecord);
-        setUserFields(user, csvRecord);
-        return user;
-    }
-
-    private void setUserFields(User user, CSVRecord csvRecord) {
-        user.setNome(csvRecord.get("nome"));
-        user.setCognome(csvRecord.get("cognome"));
-        user.setEmail(csvRecord.get("email"));
-        user.setIndirizzo(csvRecord.get("indirizzo"));
-        user.setFiscalCode(csvRecord.get("nome"));
-    }
-
 }
 

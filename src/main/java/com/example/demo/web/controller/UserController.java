@@ -1,5 +1,6 @@
 package com.example.demo.web.controller;
 
+import com.example.demo.service.CSVUserService;
 import com.example.demo.service.UserService;
 import com.example.demo.web.data.UserWeb;
 import org.slf4j.Logger;
@@ -18,10 +19,12 @@ public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     private UserService userService;
+    private CSVUserService csvUserService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, CSVUserService csvUserService) {
         this.userService = userService;
+        this.csvUserService = csvUserService;
     }
 
     @GetMapping
@@ -58,7 +61,7 @@ public class UserController {
     @PostMapping("/upload")
     public ResponseEntity<Void> uploadUsersFromCsv(@RequestParam("file") MultipartFile file) {
         log.info("multiPartFIle: {}",file);
-        userService.saveUsersFromCsv(file);
+        csvUserService.saveUsersFromCsv(file);
         return ResponseEntity.ok().build();
     }
 }
